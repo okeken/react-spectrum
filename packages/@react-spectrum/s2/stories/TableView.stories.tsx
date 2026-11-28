@@ -1483,6 +1483,47 @@ export const ViewportScrolling: StoryObj<typeof TableView> = {
   }
 };
 
+let wrappingWords = ['apple', 'birch', 'cloud', 'dune', 'elm', 'fern', 'grove', 'harbor'];
+let wrappingRows = Array.from({length: 128}, (_, i) => ({
+  id: i + 1,
+  text: Array.from(
+    {length: 3 + ((i * 7) % 15)},
+    (_, j) => wrappingWords[(i + j * 3) % wrappingWords.length]
+  ).join(' '),
+  value: (i * 37) % 1000
+}));
+
+export const ViewportScrollingWrap: StoryObj<typeof TableView> = {
+  render: args => (
+    <TableView aria-label="Wrapping rows table" {...args} styles={style({width: 392})}>
+      <TableHeader>
+        <Column isRowHeader>Entry</Column>
+        <Column>Sample text</Column>
+        <Column>Value</Column>
+      </TableHeader>
+      <TableBody items={wrappingRows}>
+        {item => (
+          <Row id={item.id}>
+            <Cell>Entry {item.id}</Cell>
+            <Cell>{item.text}</Cell>
+            <Cell>{item.value}</Cell>
+          </Row>
+        )}
+      </TableBody>
+    </TableView>
+  ),
+  args: {
+    ...Example.args,
+    overflowMode: 'wrap'
+  },
+  name: 'viewport scrolling, overflowMode wrap',
+  parameters: {
+    docs: {
+      disable: true
+    }
+  }
+};
+
 export const ScrollableContainer: StoryObj<typeof TableView> = {
   render: args => (
     <div style={{width: 800, height: 500, overflow: 'auto'}}>

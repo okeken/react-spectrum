@@ -285,6 +285,12 @@ export class Virtualizer<T extends object, V> {
   private updateSubviews() {
     let visibleLayoutInfos = this.getVisibleLayoutInfos();
 
+    // Computing the visible layout infos may lay out more of the collection and change the content size.
+    let contentSize = this.layout.getContentSize();
+    if (!contentSize.equals(this.contentSize)) {
+      (this as Mutable<this>).contentSize = new Size(contentSize.width, contentSize.height);
+    }
+
     let removed = new Set<ChildView<T, V>>();
     for (let [key, view] of this._visibleViews) {
       let layoutInfo = visibleLayoutInfos.get(key);
